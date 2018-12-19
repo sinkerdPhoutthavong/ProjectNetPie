@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IoT Energy</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="lao/style.css">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="https://netpie.io/microgear.js"></script>
+	<script src="js/raphael-2.1.4.min.js"></script>
+	<script src="js/justgage.js"></script>
+</head>
+<body>
+<style>
+	body{
+		background-color: #EEEEEE;
+	}
+	h2{
+		color: #9E9E9E;
+	}
+    .card{
+    	text-align: center;
+    }
+	#temp, #humid, #light {
+		float: center;
+		width:290px; height:300px;
+		display: inline-block;
+	}
+
+	#name {
+		font-size: 20px;
+		color: blue;
+	 }
+	}
+</style>
+
+<section id="esp8266">
+  <div class="container">
+	<a href=""><div id="data" class="text-right"><FONT COLOR=#DDDDDD><b>OFFLINE</b></FONT></div></a>
+	<div class="row">
+	  <div class="col-md-6" style="margin-top: 20px;">
+	  	<div class="card">
+	  		<div class="">
+	  			<div id="temp"></div>
+	  			<h4 style="margin-top: -60px;">ອຸນຫະພູມອາກາດ</h4>
+	  		</div>
+	  	</div>
+	  </div>
+	  <div class="col-md-6" style="margin-top: 20px;">
+	  	<div class="card">
+	  		<div class="">
+	  			<div id="humid"></div>
+	  			<h4 style="margin-top: -60px;">ຄວາມຊຸ່ມອາກາດ</h4>
+	  		</div>
+	  	</div>
+	  </div>
+	  <div class="col-md-6" style="margin-top: 20px;">
+	  	<div class="card">
+	  		<div class="">
+	  			<div id="light"></div>
+	  			<h4 style="margin-top: -60px;">ຄວາມເຂັ້ມແສງ</h4>
+	  		</div>
+	  	</div>
+	  </div>
+	  <div class="col-md-6" style="margin-top: 20px;">
+	  	<div class="card" style="margin-bottom:20px;">
+	  		<div class="">
+	  			<h4 style="margin-top:20px;">ອຸປະກອນເຊື່ອມຕໍ່: </h4><p id="name"></p>
+	  		</div>
+	  	</div>
+	  </div>
+	</div>
+  </div>
+</section>
+
+<script>
+	var temp,humid,light;
+
+	window.onload = function(){
+		temp = new JustGage({
+			id: "temp",
+			value: 0.0,
+			decimals: 2, 
+			min: 0.0,
+			max: 100.0,
+			title: "",
+			label: "C",
+			showMinMax: false,
+			levelColors: ["#76FF03","#C6FF00","#F57C00"]
+		});
+
+		humid = new JustGage({
+			id: "humid", 
+			value: 0.0, 
+			decimals: 2,
+			min: 0.0,
+			max: 100.0,
+			title: "",
+			label: "%",
+			levelColors: ["#1E88E5","#1565C0","#00897B"]
+		});
+
+		light = new JustGage({
+			id: "light", 
+			value: 0.0,
+			// decimals: 2, 
+			min: 0,
+			max: 1500,
+			title: "",
+			label: "%",
+			levelColors: ["#00fff6","#ff00fc","#1200ff"]
+		});
+
+	};
+
+</script>
+
+<script>
+
+	const appid = "LaoSmartfarm";
+	const appkey = "qoRirhYkslTXbdI";
+	const appsecret = "9ZMCHFs4YGTYUHhbTZ3zzYxCe";
+
+	var microgear = Microgear.create({
+        key: appkey,
+        secret: appsecret,
+        alias : "dht"
+	});
+
+	microgear.on('message',function(topic,msg) {
+		var split_msg = msg.split(",");
+		console.log(msg);
+
+		if(typeof(split_msg[3])=='undefined' || split_msg[3] == 'esp8266'){
+				document.getElementById("name").innerHTML = split_msg[3].toUpperCase();
+				temp.refresh(split_msg[0]);
+				humid.refresh(split_msg[1]);
+				light.refresh(Math.ceil(split_msg[2]));
+		}
+	});
+
+	microgear.on('connected', function() {
+		microgear.subscribe("/dht");
+		document.getElementById("data").innerHTML = "<h5>ສະຖານະ:<FONT color=#00BB00>ONLINE</FONT></h5>";
+	});
+
+	microgear.on('disconnected', function() {
+		document.getElementById("data").innerHTML = "<h5>ສະຖານະ:<FONT color=#00BB00>OFFLINE</FONT></h5>";
+	});
+
+	microgear.connect(appid);
+
+</script>
+
+</body>
+</html>

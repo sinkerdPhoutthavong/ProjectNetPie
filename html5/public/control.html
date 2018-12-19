@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IoT Control</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+	<link rel="stylesheet" href="lao/style.css">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="https://netpie.io/microgear.js"></script>
+	<script src="js/raphael-2.1.4.min.js"></script>
+	<script src="js/justgage.js"></script>
+</head>
+<body>
+<style>
+	body{
+		background-color: #EEEEEE;
+	}
+	.btn{
+		border: 2px solid #1E88E5;
+        border-radius: 12px;
+        width: 100px;
+        margin-right:10px;
+	}
+	.btn1{
+		border: 2px solid #FFA726;
+        border-radius: 12px;
+        width: 100px;
+	}
+</style>
+<section style="margin-top:20px;margin-bottom:20px">
+ 	<div class="container">
+ 	  <div class="row">
+ 	  	<div class="col-md-4">
+ 	  		<div class="card">
+			  <div class="card-body">
+			  	<h5><i class="fas fa-plug"></i>  ຄວບຄຸມປ້ຳຫົດນ້ຳ: <a href=""><b id="status1"></b></a></h5>
+			    <center id="relay0" onclick="switchPress()">
+			    	<button class="btn btn-outline-info btn-lg" onclick="relay1_on()">
+			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
+			    	</button>
+			        <button class="btn btn-outline-warning btn1 btn-lg" onclick="relay1_off()">
+			        	<b><i class="fas fa-power-off"></i>  ປິດ</b>
+			        </button>
+			    </center>
+			  </div>
+			</div>
+ 	  	</div>
+ 	  	<div class="col-md-4" style="margin-top:2px;">
+ 	  		<div class="card">
+			  <div class="card-body">
+			  	<h5><i class="fas fa-tint"></i>  ຄວບຄຸມປ້ຳຜົ່ນນ້ຳ: <a href=""><b id="status2"></b></a></h5>
+			    <center id="relay1" onclick="switchPressTwo()">
+			    	<button class="btn btn-outline-info btn-lg" onclick="relay2_on()">
+			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
+			    	</button>
+			        <button class="btn btn-outline-warning btn1 btn-lg" onclick="relay2_off()">
+			        	<b><i class="fas fa-power-off"></i>  ປິດ</b>
+			        </button>
+			    </center>
+			  </div>
+			</div>
+ 	  	</div>
+ 	  	<div class="col-md-4" style="margin-top:2px;">
+ 	  		<div class="card">
+			  <div class="card-body">
+			  	<h5><i class="fas fa-bullseye"></i>  ຄວບຄຸມພັດລົມລະບາຍອາກາດ: <a href=""><b id="status3"></b></a></h5>
+			    <center id="relay2" onclick="switchPressThree()">
+			    	<button class="btn btn-outline-info btn-lg" onclick="relay3_on()">
+			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
+			    	</button>
+			        <button class="btn btn-outline-warning btn1 btn-lg" onclick="relay3_off()">
+			        	<b><i class="fas fa-power-off"></i>  ປິດ</b>
+			        </button>
+			    </center>
+			  </div>
+			</div>
+ 	  	</div>
+ 	  	<div class="col-md-4" style="margin-top:2px;">
+ 	  		<div class="card">
+			  <div class="card-body">
+			  	<h5><i class="fas fa-snowflake"></i>  ຄວບຄຸມຄວາມເຢັນ: <a href=""><b id="status4"></b></a></h5>
+			    <center>
+			    	<button class="btn btn-outline-info btn-lg" onclick="relay4_on()">
+			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
+			    	</button>
+			        <button class="btn btn-outline-warning btn1 btn-lg" onclick="relay4_off()">
+			        	<b><i class="fas fa-power-off"></i>  ປິດ</b>
+			        </button>
+			    </center>
+			  </div>
+			</div>
+ 	  	</div>
+ 	  </div>
+ 	</div>
+ </section>
+
+<script>
+    var parameters_string = location.hash.substring(1).split(':');
+	var appid,appkey,appsecret;
+    if (parameters_string.length==3) {
+		appid = parameters_string[0];
+		appkey = parameters_string[1];
+		appsecret = parameters_string[2];
+	}else{
+		console.log('appid or auth invalid<br>http://'+window.location.host+window.location.pathname+'#APPID:KEY:SECRET');
+	}
+	
+	const APPKEY = "qoRirhYkslTXbdI";
+    const APPSECRET = "9ZMCHFs4YGTYUHhbTZ3zzYxCe";
+    const APPID = "LaoSmartfarm";
+    const ALIAS = "Plug";
+
+	var microgear = Microgear.create({
+		gearkey: APPKEY,
+		gearsecret: APPSECRET
+	});
+
+
+    // SetUp Relay 1
+	function switchPress(){
+		if(document.getElementById("relay0").className == "relay0 active"){
+			microgear.chat("pieplug","OFF");
+		}else if(document.getElementById("relay0").className == "relay0"){
+			microgear.chat("pieplug","ON");
+		}
+	}
+	// SetUp message Relay 1
+	microgear.on('message', function(topic,data) {
+		if(data=="ON"){
+			document.getElementById("relay0").className = "relay0 active";
+		}else if(data=="OFF"){
+			document.getElementById("relay0").className = "relay0";
+		}
+	});
+
+	microgear.on('connected', function() {
+		microgear.setname('controllerplug');
+		document.getElementById("relay0").className = "relay0 active";
+		document.getElementById("relay0").style.display = "block";
+	});
+
+	// SetUp Relay 2 ===============================================================
+	function switchPressTwo(){
+		if(document.getElementById("relay1").className == "relay1 active"){
+			microgear.chat("pieplug","OFF1");
+		}else if(document.getElementById("relay1").className == "relay1"){
+			microgear.chat("pieplug","ON1");
+		}
+	}
+    
+	// SetUp message Relay 2
+	microgear.on('message', function(topic,data) {
+		if(data=="ON1"){
+			document.getElementById("relay1").className = "relay1 active";
+		}else if(data=="OFF1"){
+			document.getElementById("relay1").className = "relay1";
+		}
+	});
+
+	microgear.on('connected', function() {
+		microgear.setname('controllerplug');
+		document.getElementById("relay1").className = "relay1 active";
+		document.getElementById("relay1").style.display = "block";
+	});
+
+	// SetUp Relay 3 ===============================================================
+	function switchPressThree(){
+		if(document.getElementById("relay2").className == "relay2 active"){
+			microgear.chat("pieplug","OFF2");
+		}else if(document.getElementById("relay1").className == "relay1"){
+			microgear.chat("pieplug","ON2");
+		}
+	}
+    
+	// SetUp message Relay 3
+	microgear.on('message', function(topic,data) {
+		if(data=="ON2"){
+			document.getElementById("relay2").className = "relay2 active";
+		}else if(data=="OFF2"){
+			document.getElementById("relay2").className = "relay2";
+		}
+	});
+
+	microgear.on('connected', function() {
+		microgear.setname('controllerplug');
+		document.getElementById("relay2").className = "relay2 active";
+		document.getElementById("relay2").style.display = "block";
+	});
+
+	microgear.resettoken();
+	microgear.connect(APPID);
+	
+</script>
+<script>
+	//Status Control
+ function relay1_on() {
+   document.getElementById("status1").innerHTML = "ເປີດ";
+ }
+ function relay1_off() {
+   document.getElementById("status1").innerHTML = "ປິດ";
+ }
+ 	//Status Control
+ function relay2_on() {
+   document.getElementById("status2").innerHTML = "ເປີດ";
+ }
+ function relay2_off() {
+   document.getElementById("status2").innerHTML = "ປິດ";
+ }
+ 	//Status Control
+ function relay3_on() {
+   document.getElementById("status3").innerHTML = "ເປີດ";
+ }
+ function relay3_off() {
+   document.getElementById("status3").innerHTML = "ປິດ";
+ }
+ 	//Status Control
+ function relay4_on() {
+   document.getElementById("status4").innerHTML = "ເປີດ";
+ }
+ function relay4_off() {
+   document.getElementById("status4").innerHTML = "ປິດ";
+ }
+</script>
+</body>
+</html>
