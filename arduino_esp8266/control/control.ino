@@ -6,7 +6,7 @@
 #include <ESP8266WiFi.h>
 #include <EEPROM.h>
 
-const char* ssid     = "pitidev";
+const char* ssid     = "PitiDev";
 const char* password = "ssssssss";
 
 #define APPID       "LaoSmartfarm"
@@ -23,6 +23,7 @@ AuthClient *authclient;
 #define relayPin D1
 #define relay2 D2
 #define relay3 D3
+#define relay4 D8
 
 MicroGear microgear(client);
 
@@ -39,29 +40,37 @@ void onMsghandler(char *topic, uint8_t* msg, unsigned int msglen) {
 
   String stateStr = String(strState).substring(0, msglen);
 
-  //Relay One
-  if (stateStr == "ON") {
-    digitalWrite(relayPin, LOW);
-    microgear.chat("controllerplug", "ON");
-  } else if (stateStr == "OFF") {
-    digitalWrite(relayPin, HIGH);
-    microgear.chat("controllerplug", "OFF");
-  }
-  //Relay Two
+  //Relay 1
   if (stateStr == "ON1") {
-    digitalWrite(relay2, LOW);
+    digitalWrite(relayPin, LOW);
     microgear.chat("controllerplug", "ON1");
   } else if (stateStr == "OFF1") {
-    digitalWrite(relay2, HIGH);
+    digitalWrite(relayPin, HIGH);
     microgear.chat("controllerplug", "OFF1");
   }
-  //Relay Three
+  //Relay 2
   if (stateStr == "ON2") {
-    digitalWrite(relay3, LOW);
+    digitalWrite(relay2, LOW);
     microgear.chat("controllerplug", "ON2");
   } else if (stateStr == "OFF2") {
-    digitalWrite(relay3, HIGH);
+    digitalWrite(relay2, HIGH);
     microgear.chat("controllerplug", "OFF2");
+  }
+  //Relay 3
+  if (stateStr == "ON3") {
+    digitalWrite(relay3, LOW);
+    microgear.chat("controllerplug", "ON3");
+  } else if (stateStr == "OFF3") {
+    digitalWrite(relay3, HIGH);
+    microgear.chat("controllerplug", "OFF3");
+  }
+  //Relay 4
+  if (stateStr == "ON4") {
+    digitalWrite(relay4, LOW);
+    microgear.chat("controllerplug", "ON4");
+  } else if (stateStr == "OFF4") {
+    digitalWrite(relay4, HIGH);
+    microgear.chat("controllerplug", "OFF4");
   }
 }
 

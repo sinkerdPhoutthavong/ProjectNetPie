@@ -2,7 +2,7 @@
 #include <MicroGear.h>
 #include "DHT.h"
 
-const char* ssid     = "pitidev";
+const char* ssid     = "PitiDev";
 const char* password = "ssssssss";
 
 #define APPID   "LaoSmartfarm"  

@@ -33,10 +33,10 @@
  	<div class="container">
  	  <div class="row">
  	  	<div class="col-md-4">
- 	  		<div class="card">
+ 	  		<div class="card shadow p-3 bg-white rounded">
 			  <div class="card-body">
 			  	<h5><i class="fas fa-plug"></i>  ຄວບຄຸມປ້ຳຫົດນ້ຳ: <a href=""><b id="status1"></b></a></h5>
-			    <center id="relay0" onclick="switchPress()">
+			    <center id="relay1" onclick="switchPress()">
 			    	<button class="btn btn-outline-info btn-lg" onclick="relay1_on()">
 			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
 			    	</button>
@@ -48,10 +48,10 @@
 			</div>
  	  	</div>
  	  	<div class="col-md-4" style="margin-top:2px;">
- 	  		<div class="card">
+ 	  		<div class="card shadow p-3 bg-white rounded">
 			  <div class="card-body">
 			  	<h5><i class="fas fa-tint"></i>  ຄວບຄຸມປ້ຳຜົ່ນນ້ຳ: <a href=""><b id="status2"></b></a></h5>
-			    <center id="relay1" onclick="switchPressTwo()">
+			    <center id="relay2" onclick="switchPressTwo()">
 			    	<button class="btn btn-outline-info btn-lg" onclick="relay2_on()">
 			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
 			    	</button>
@@ -63,10 +63,10 @@
 			</div>
  	  	</div>
  	  	<div class="col-md-4" style="margin-top:2px;">
- 	  		<div class="card">
+ 	  		<div class="card shadow p-3 bg-white rounded">
 			  <div class="card-body">
 			  	<h5><i class="fas fa-bullseye"></i>  ຄວບຄຸມພັດລົມລະບາຍອາກາດ: <a href=""><b id="status3"></b></a></h5>
-			    <center id="relay2" onclick="switchPressThree()">
+			    <center id="relay3" onclick="switchPressThree()">
 			    	<button class="btn btn-outline-info btn-lg" onclick="relay3_on()">
 			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
 			    	</button>
@@ -78,10 +78,10 @@
 			</div>
  	  	</div>
  	  	<div class="col-md-4" style="margin-top:2px;">
- 	  		<div class="card">
+ 	  		<div class="card shadow p-3 mb-5 bg-white rounded">
 			  <div class="card-body">
 			  	<h5><i class="fas fa-snowflake"></i>  ຄວບຄຸມຄວາມເຢັນ: <a href=""><b id="status4"></b></a></h5>
-			    <center>
+			    <center id="relay4" onclick="switchPressFour()">
 			    	<button class="btn btn-outline-info btn-lg" onclick="relay4_on()">
 			    		<b><i class="far fa-lightbulb"></i>  ເປີດ</b>
 			    	</button>
@@ -120,37 +120,13 @@
 
     // SetUp Relay 1
 	function switchPress(){
-		if(document.getElementById("relay0").className == "relay0 active"){
-			microgear.chat("pieplug","OFF");
-		}else if(document.getElementById("relay0").className == "relay0"){
-			microgear.chat("pieplug","ON");
-		}
-	}
-	// SetUp message Relay 1
-	microgear.on('message', function(topic,data) {
-		if(data=="ON"){
-			document.getElementById("relay0").className = "relay0 active";
-		}else if(data=="OFF"){
-			document.getElementById("relay0").className = "relay0";
-		}
-	});
-
-	microgear.on('connected', function() {
-		microgear.setname('controllerplug');
-		document.getElementById("relay0").className = "relay0 active";
-		document.getElementById("relay0").style.display = "block";
-	});
-
-	// SetUp Relay 2 ===============================================================
-	function switchPressTwo(){
 		if(document.getElementById("relay1").className == "relay1 active"){
 			microgear.chat("pieplug","OFF1");
 		}else if(document.getElementById("relay1").className == "relay1"){
 			microgear.chat("pieplug","ON1");
 		}
 	}
-    
-	// SetUp message Relay 2
+	// SetUp message Relay 1
 	microgear.on('message', function(topic,data) {
 		if(data=="ON1"){
 			document.getElementById("relay1").className = "relay1 active";
@@ -165,16 +141,16 @@
 		document.getElementById("relay1").style.display = "block";
 	});
 
-	// SetUp Relay 3 ===============================================================
-	function switchPressThree(){
+	// SetUp Relay 2 ===============================================================
+	function switchPressTwo(){
 		if(document.getElementById("relay2").className == "relay2 active"){
 			microgear.chat("pieplug","OFF2");
-		}else if(document.getElementById("relay1").className == "relay1"){
+		}else if(document.getElementById("relay2").className == "relay2"){
 			microgear.chat("pieplug","ON2");
 		}
 	}
     
-	// SetUp message Relay 3
+	// SetUp message Relay 2
 	microgear.on('message', function(topic,data) {
 		if(data=="ON2"){
 			document.getElementById("relay2").className = "relay2 active";
@@ -188,6 +164,56 @@
 		document.getElementById("relay2").className = "relay2 active";
 		document.getElementById("relay2").style.display = "block";
 	});
+
+	// SetUp Relay 3 ===============================================================
+	function switchPressThree(){
+		if(document.getElementById("relay3").className == "relay3 active"){
+			microgear.chat("pieplug","OFF3");
+		}else if(document.getElementById("relay3").className == "relay3"){
+			microgear.chat("pieplug","ON3");
+		}
+	}
+    
+	// SetUp message Relay 3
+	microgear.on('message', function(topic,data) {
+		if(data=="ON3"){
+			document.getElementById("relay3").className = "relay3 active";
+		}else if(data=="OFF3"){
+			document.getElementById("relay3").className = "relay3";
+		}
+	});
+
+	microgear.on('connected', function() {
+		microgear.setname('controllerplug');
+		document.getElementById("relay3").className = "relay3 active";
+		document.getElementById("relay3").style.display = "block";
+	});
+	//End Relay 3
+
+	// SetUp Relay 4 ===============================================================
+	function switchPressFour(){
+		if(document.getElementById("relay4").className == "relay4 active"){
+			microgear.chat("pieplug","OFF4");
+		}else if(document.getElementById("relay4").className == "relay4"){
+			microgear.chat("pieplug","ON4");
+		}
+	}
+    
+	// SetUp message Relay 4
+	microgear.on('message', function(topic,data) {
+		if(data=="ON4"){
+			document.getElementById("relay4").className = "relay4 active";
+		}else if(data=="OFF4"){
+			document.getElementById("relay4").className = "relay4";
+		}
+	});
+
+	microgear.on('connected', function() {
+		microgear.setname('controllerplug');
+		document.getElementById("relay4").className = "relay4 active";
+		document.getElementById("relay4").style.display = "block";
+	});
+
 
 	microgear.resettoken();
 	microgear.connect(APPID);
