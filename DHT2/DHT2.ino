@@ -8,7 +8,7 @@ const char* password = "ssssssss";
 #define APPID   "LaoSmartfarm"  
 #define KEY     "4F8dSA9hfL0cjYb" 
 #define SECRET  "OPH3LsTf5Wi5T52wEll5kbB7d" 
-#define ALIAS   "dht1"
+#define ALIAS   "dht2"
 
 #define DHTPIN D4
 #define DHTTYPE DHT22
@@ -41,7 +41,7 @@ void onFoundgear(char *attribute, uint8_t* msg, unsigned int msglen) {
   for (int i=0; i<msglen; i++)
     Serial.print((char)msg[i]);
   Serial.println();  
-  microgear.publish("/dht1",msgstr);
+  microgear.publish("/dht2",msgstr);
 }
 
 void onLostgear(char *attribute, uint8_t* msg, unsigned int msglen) {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>IoT Strawberry</title>
+	<title>Tem OutHome</title>
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="lao/style.css">
@@ -81,7 +81,7 @@
 		temp = new JustGage({
 			id: "temp",
 			value: 0.0,
-			decimals: 2, 
+			decimals: 2,
 			min: 0.0,
 			max: 100.0,
 			title: "",
@@ -91,8 +91,8 @@
 		});
 
 		humid = new JustGage({
-			id: "humid", 
-			value: 0.0, 
+			id: "humid",
+			value: 0.0,
 			decimals: 2,
 			min: 0.0,
 			max: 100.0,
@@ -102,9 +102,9 @@
 		});
 
 		light = new JustGage({
-			id: "light", 
+			id: "light",
 			value: 0.0,
-			// decimals: 2, 
+			// decimals: 2,
 			min: 0,
 			max: 1500,
 			title: "",
@@ -125,7 +125,7 @@
 	var microgear = Microgear.create({
         key: appkey,
         secret: appsecret,
-        alias : "dht1"
+        alias : "dht2"
 	});
 
 	microgear.on('message',function(topic,msg) {
@@ -141,7 +141,7 @@
 	});
 
 	microgear.on('connected', function() {
-		microgear.subscribe("/dht1");
+		microgear.subscribe("/dht2");
 		document.getElementById("data").innerHTML = "<h5>ສະຖານະ:<FONT color=#00BB00>ONLINE</FONT></h5>";
 	});
 
