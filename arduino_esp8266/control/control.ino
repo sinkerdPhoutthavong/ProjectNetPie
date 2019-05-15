@@ -25,6 +25,10 @@ AuthClient *authclient;
 #define relay3 D3
 #define relay4 D8
 
+//for get Times
+int timezone = 7 * 3600;
+int dst = 0;
+
 MicroGear microgear(client);
 
 void onMsghandler(char *topic, uint8_t* msg, unsigned int msglen) {
@@ -102,6 +106,7 @@ void setup() {
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+     configTime(timezone, dst, "pool.ntp.org","time.nist.gov");
 
     //uncomment the line below if you want to reset token -->
     microgear.resetToken();
@@ -115,6 +120,32 @@ void loop() {
     microgear.loop();
     Serial.println("connect...");
     digitalWrite(led0, HIGH);
+    
+                        time_t now = time(nullptr);
+                        struct tm* p_tm = localtime(&now);
+                        int h = p_tm->tm_hour;
+                        int m = p_tm->tm_min;
+                        int s = p_tm->tm_sec;
+                        int Day = p_tm->tm_mday;
+                        int Month = p_tm->tm_mon + 1;
+                        int Years = p_tm->tm_year + 1900;   
+//                         Serial.print("H: ");      
+//                         Serial.println(h);
+//                         Serial.print("M: ");      
+//                         Serial.println(m);
+//                         Serial.print("S: ");      
+//                         Serial.println(s);
+                         delay(1000);
+
+                    if((h==17 && m>=1) && (h==17 && m<=5)) {
+                        digitalWrite(WATER_PUMP,HIGH); // SET RELAY Pin WATER PUMP
+                    }else if((h==7 && m>=1) && (h==7 && m<=5)){
+                        digitalWrite(WATER_PUMP,HIGH); // SET RELAY Pin WATER PUMP
+                    }else{
+                        digitalWrite(WATER_PUMP,LOW); // SET RELAY Pin WATER PUMP
+                    }
+                      
+    
   } else {
     Serial.println("connection lost, reconnect...");
     microgear.connect(APPID);
